@@ -6,9 +6,6 @@ import (
 )
 
 /*
-#cgo CFLAGS: -Inimcache
-#cgo CFLAGS: -I../nimbus-eth2/vendor/nimbus-build-system/vendor/Nim-csources-v1/c_code/
-#cgo LDFLAGS: -L. -lcb
 #include <stdlib.h>
 #include "cb.h"
 
