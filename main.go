@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"unsafe"
 )
 
 /*
 #include <stdlib.h>
-#include "cb.h"
+#include "lightclient.h"
 
 typedef void (*callback_type)(char *);
 void goCallback_cgo(char *);
@@ -23,9 +22,15 @@ func goCallback(json *C.char) {
 
 func main() {
 	fmt.Println("vim-go")
-	C.setHeaderCallback((C.callback_type)(unsafe.Pointer(C.goCallback_cgo)))
-
-	C.invokeHeaderCallback()
+	//cb := (C.callback_type)(unsafe.Pointer(C.goCallback_cgo))
 	C.testEcho()
+	// C.setOptimisticHeaderCallback(cb)
+	// C.setFinalizedHeaderCallback(cb)
+	fmt.Println("vim-go 2")
+	C.startLightClient()
+	fmt.Println("vim-go 3")
+
+	//C.invokeHeaderCallback()
+	//C.testEcho()
 
 }
