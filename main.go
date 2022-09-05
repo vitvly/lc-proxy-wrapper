@@ -1,7 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"os"
+
+	"os/signal"
+	"syscall"
+
+	"github.com/BurntSushi/toml"
 )
 
 /*
@@ -10,6 +17,7 @@ import (
 
 typedef void (*callback_type)(char *);
 void goCallback_cgo(char *);
+
 */
 import "C"
 
@@ -27,9 +35,34 @@ func main() {
 	// C.setOptimisticHeaderCallback(cb)
 	// C.setFinalizedHeaderCallback(cb)
 	fmt.Println("vim-go 2")
-	C.startLightClient()
+	type Config struct {
+		Network          string
+		TrustedBlockRoot string
+	}
+
+	var testConfig = Config{
+		Network:          "prater",
+		TrustedBlockRoot: "0x017e4563ebf7fed67cff819c63d8da397b4ed0452a3bbd7cae13476abc5020e4",
+	}
+
+	var buffer bytes.Buffer
+	err := toml.NewEncoder(&buffer).Encode(testConfig)
+	if err != nil {
+		return
+	}
+	var configStr = buffer.String()
+	configCStr := C.CString(configStr)
+	fmt.Println("configStr: ", configStr)
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		C.startLc(configCStr)
+	}()
 	fmt.Println("vim-go 3")
 
+	<-signals
 	//C.invokeHeaderCallback()
 	//C.testEcho()
 
