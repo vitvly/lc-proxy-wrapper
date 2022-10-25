@@ -18,7 +18,7 @@ build-light-client-go:
 build-go: build-nim
 	CGO_CFLAGS="$(CGO_CFLAGS_TEST)" CGO_LDFLAGS="$(CGO_LDFLAGS_TEST)" go build
 
-build-nim-test: 
+build-lc-proxy-wrapper: 
 	nim c --app:staticlib --header:cb.h --noMain:on --nimcache:$(CURDIR)/nimcache cb.nim
 
 light-client-status-go: build-nim
@@ -26,5 +26,5 @@ light-client-status-go: build-nim
 .PHONY: clean
 
 clean:
-	rm -rf nimcache libcb.a nim-test
+	rm -rf nimcache libcb.a lc-proxy-wrapper
 

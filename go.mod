@@ -1,4 +1,4 @@
-module status.im/status-go/nim-test
+module status.im/lc-proxy-wrapper
 
 go 1.18
 
