@@ -14,7 +14,7 @@ import (
 
 /*
 #include <stdlib.h>
-#include "lightclient.h"
+#include "lcproxy.h"
 
 typedef void (*callback_type)(char *);
 void goCallback_cgo(char *);
@@ -22,11 +22,34 @@ void goCallback_cgo(char *);
 */
 import "C"
 
+type Web3UrlType struct {
+	Kind    string `toml:"kind"`
+	Web3Url string `toml:"web3Url"`
+}
+type Config struct {
+	Eth2Network      string      `toml:"network"`
+	TrustedBlockRoot string      `toml:"trusted-block-root"`
+	Web3Url          Web3UrlType `toml:"web3-url"`
+}
+
+type BeaconBlockHeader struct {
+	Slot          uint64 `json:"slot"`
+	ProposerIndex uint64 `json:"proposer_index"`
+	ParentRoot    string `json:"parent_root"`
+	StateRoot     string `json:"state_root"`
+}
+
 //export goCallback
 func goCallback(json *C.char) {
 	goStr := C.GoString(json)
 	//C.free(unsafe.Pointer(json))
 	fmt.Println("### goCallback " + goStr)
+	// var hdr BeaconBlockHeader
+	// err := json.NewDecoder([]byte(goStr)).Decode(&hdr)
+	// if err != nil {
+	// 	fmt.Println("### goCallback json parse error: " + err)
+	// }
+	// fmt.Println("Unmarshal result: " + hdr)
 }
 
 func main() {
@@ -36,14 +59,10 @@ func main() {
 	C.setOptimisticHeaderCallback(cb)
 	C.setFinalizedHeaderCallback(cb)
 	fmt.Println("vim-go 2")
-	type Config struct {
-		Eth2Network      string `toml:"network"`
-		TrustedBlockRoot string `toml:"trusted-block-root"`
-	}
-
 	var testConfig = Config{
 		Eth2Network:      "mainnet",
-		TrustedBlockRoot: "0x60d6462ea001c078ec95c4cccb7982e82503b99bd5fd91a5b5ed06a0d736fa6f",
+		TrustedBlockRoot: "0x6fd2f9fdc616a0755f3f88ac58e4a7871788c3128261a18bf9645eee7042eb53",
+		Web3Url:          Web3UrlType{"HttpUrl", "https://mainnet.infura.io/v3/800c641949d64d768a5070a1b0511938"},
 		//Eth2Network:      "prater",
 		//TrustedBlockRoot: "0x017e4563ebf7fed67cff819c63d8da397b4ed0452a3bbd7cae13476abc5020e4",
 	}
