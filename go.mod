@@ -1,4 +1,4 @@
-module status.im/lc-proxy-wrapper
+module github.com/siphiuel/lc-proxy-wrapper
 
 go 1.18
 
