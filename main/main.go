@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/siphiuel/lc-proxy-wrapper/proxy"
+	proxy "github.com/siphiuel/lc-proxy-wrapper"
 )
 
 func main() {

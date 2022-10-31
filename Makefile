@@ -23,6 +23,9 @@ build-light-client-go:
 build-lc-proxy-wrapper:
 	CGO_CFLAGS="$(CGO_CFLAGS)" go build -x -v -ldflags '-v "-extldflags=-Wl,-rpath,. -llcproxy -L$(LC_PROXY_OUT_PATH)"'
 
+build-lc-proxy-wrapper-exe:
+	CGO_CFLAGS="$(CGO_CFLAGS)" go build -x -v -ldflags '-v "-extldflags=-Wl,-rpath,. -llcproxy -L$(LC_PROXY_OUT_PATH)"' -o lc-proxy-wrapper ./main 
+
 build-go: build-nim
 	CGO_CFLAGS="$(CGO_CFLAGS_TEST)" CGO_LDFLAGS="$(CGO_LDFLAGS_TEST)" go build
 
