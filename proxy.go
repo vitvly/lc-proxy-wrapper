@@ -14,7 +14,7 @@ import (
 
 /*
 #include <stdlib.h>
-#include "lcproxy.h"
+#include "verifproxy.h"
 
 typedef void (*callback_type)(char *);
 void goCallback_cgo(char *);
@@ -90,7 +90,7 @@ func StartLightClient(ctx context.Context, cfg *Config) {
 		jsonStr := string(jsonBytes)
 		fmt.Println("### jsonStr: ", jsonStr)
 		configCStr := C.CString(jsonStr)
-		C.startLcViaJson(configCStr)
+		C.startProxyViaJson(configCStr)
 		fmt.Println("inside go-func after startLcViaJson")
 	}()
 	go func() {
