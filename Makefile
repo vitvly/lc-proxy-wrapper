@@ -1,7 +1,7 @@
 NIMBUS_ETH1_PATH ?= $(CURDIR)/../nimbus-eth1
 NIMBASE_H_PATH ?= $(NIMBUS_ETH1_PATH)/vendor/nimbus-build-system/vendor/Nim-csources-v1/c_code/
 
-VERIF_PROXY_OUT_PATH ?= $(NIMBUS_ETH1_PATH)/build/libverifproxy
+export VERIF_PROXY_OUT_PATH ?= $(NIMBUS_ETH1_PATH)/build/libverifproxy
 
 CGO_CFLAGS_TEST ?= -I$(CURDIR)/nimcache -I$(NIMBASE_H_PATH)
 CGO_LDFLAGS_TEST ?= -L. -lcb
