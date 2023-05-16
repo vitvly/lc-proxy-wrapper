@@ -75,7 +75,6 @@ func createTomlFile(cfg *Config) string {
 func StartLightClient(ctx context.Context, cfg *Config) {
 	fmt.Println("vim-go")
 	cb := (C.callback_type)(unsafe.Pointer(C.goCallback_cgo))
-	C.testEcho()
 	C.setOptimisticHeaderCallback(cb)
 	C.setFinalizedHeaderCallback(cb)
 	fmt.Println("vim-go 2")
