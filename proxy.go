@@ -89,7 +89,8 @@ func StartLightClient(ctx context.Context, cfg *Config) {
 		jsonStr := string(jsonBytes)
 		fmt.Println("### jsonStr: ", jsonStr)
 		configCStr := C.CString(jsonStr)
-		C.startProxyViaJson(configCStr)
+		nimContextPtr := C.startLightClientProxy(configCStr, cb, cb)
+		fmt.Println("ptr: %p", nimContextPtr)
 		fmt.Println("inside go-func after startLcViaJson")
 	}()
 	go func() {
