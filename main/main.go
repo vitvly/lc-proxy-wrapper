@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	proxy "github.com/siphiuel/lc-proxy-wrapper"
+	proxy "github.com/vitvly/lc-proxy-wrapper"
 )
 
 func main() {
@@ -23,17 +23,22 @@ func main() {
 		//TrustedBlockRoot: "0x017e4563ebf7fed67cff819c63d8da397b4ed0452a3bbd7cae13476abc5020e4",
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	proxy.StartLightClient(ctx, &testConfig)
+	proxyEventCh := make(chan *proxy.ProxyEvent, 10)
+	proxy.StartLightClient(ctx, &testConfig, proxyEventCh)
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 	fmt.Println("Before range signals")
-	// time.Sleep(8 * time.Second)
-	// cancel()
-	for range signals {
-		fmt.Println("Signal caught, exiting")
-		cancel()
+	for {
+		select {
+		case <-signals:
+			fmt.Println("Signal caught, exiting")
+			cancel()
+			break
+		case ev := <-proxyEventCh:
+			fmt.Println("event caught", ev.EventType)
+
+		}
 	}
-	fmt.Println("Exiting")
 
 }
