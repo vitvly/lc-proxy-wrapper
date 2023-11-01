@@ -13,7 +13,7 @@ import (
 func main() {
 	var testConfig = proxy.Config{
 		Eth2Network:      "mainnet",
-		TrustedBlockRoot: "0x7bbc8165fbd2db6b7e347d9cb440ef1d9c3dd5222fb4ee500c9485c6205ccee3",
+		TrustedBlockRoot: "0x9a6364b5702e5854172e175c9236a743743e8a9f139d8e1ec0a668eebc0f176b",
 		//Web3Url:          Web3UrlType{"HttpUrl", "https://mainnet.infura.io/v3/800c641949d64d768a5070a1b0511938"},
 		Web3Url:    "https://mainnet.infura.io/v3/800c641949d64d768a5070a1b0511938",
 		RpcAddress: "127.0.0.1",

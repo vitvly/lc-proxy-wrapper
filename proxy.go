@@ -49,15 +49,13 @@ var once sync.Once
 
 //export goCallback
 func goCallback(json *C.char, cbType int) {
-	goStr := C.GoString(json)
 	//C.free(unsafe.Pointer(json))
 	//fmt.Println("### goCallback " + goStr)
 	if proxyEventChan != nil {
 		once.Do(func() {
-
 			proxyEventChan <- &ProxyEvent{ProxyInitialised, ""}
 		})
-		proxyEventChan <- &ProxyEvent{FinalizedHeader, goStr}
+		goStr := C.GoString(json)
 		if cbType == 0 { // finalized header
 			proxyEventChan <- &ProxyEvent{FinalizedHeader, goStr}
 		} else if cbType == 1 { // optimistic header
