@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"runtime"
-	"sync"
 	"unsafe"
+
+	"github.com/vitvly/lc-proxy-wrapper/types"
 )
 
 /*
@@ -33,40 +34,25 @@ type Config struct {
 	LogLevel   string `toml:"log-level"`
 }
 
-const (
-	ProxyInitialised int = iota
-	OptimisticHeader
-	FinalizedHeader
-)
-
-type ProxyEvent struct {
-	EventType int
-	Msg       string
-}
-
-var proxyEventChan chan *ProxyEvent
-var once sync.Once
+var proxyEventChan chan *types.ProxyEvent
 
 //export goCallback
 func goCallback(json *C.char, cbType int) {
 	//C.free(unsafe.Pointer(json))
 	//fmt.Println("### goCallback " + goStr)
 	if proxyEventChan != nil {
-		once.Do(func() {
-			proxyEventChan <- &ProxyEvent{ProxyInitialised, ""}
-		})
 		goStr := C.GoString(json)
 		if cbType == 0 { // finalized header
-			proxyEventChan <- &ProxyEvent{FinalizedHeader, goStr}
+			proxyEventChan <- &types.ProxyEvent{types.FinalizedHeader, goStr}
 		} else if cbType == 1 { // optimistic header
-			proxyEventChan <- &ProxyEvent{OptimisticHeader, goStr}
+			proxyEventChan <- &types.ProxyEvent{types.OptimisticHeader, goStr}
 		}
 	}
 }
 
 var nimContextPtr unsafe.Pointer
 
-func StartLightClient(ctx context.Context, cfg *Config, proxyEventCh chan *ProxyEvent) {
+func StartLightClient(ctx context.Context, cfg *Config, proxyEventCh chan *types.ProxyEvent) {
 	proxyEventChan = proxyEventCh
 	cb := (C.callback_type)(unsafe.Pointer(C.goCallback_cgo))
 
