@@ -4,6 +4,8 @@ const (
 	ProxyInitialised int = iota
 	OptimisticHeader
 	FinalizedHeader
+	Stopped
+	Error
 )
 
 type ProxyEvent struct {
