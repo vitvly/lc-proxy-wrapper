@@ -20,17 +20,16 @@ void goCallback_cgo(char *, int);
 import "C"
 
 type Web3UrlType struct {
-	Kind    string `toml:"kind"`
-	Web3Url string `toml:"web3Url"`
+	Kind    string
+	Web3Url string
 }
 type Config struct {
-	Eth2Network      string `toml:"network"`
-	TrustedBlockRoot string `toml:"trusted-block-root"`
-	// Web3Url          Web3UrlType `toml:"web3-url"`
-	Web3Url    string `toml:"web3-url"`
-	RpcAddress string `toml:"rpc-address"`
-	RpcPort    uint16 `toml:"rpc-port"`
-	LogLevel   string `toml:"log-level"`
+	Eth2Network      string
+	TrustedBlockRoot string
+	Web3Url          string
+	RpcAddress       string
+	RpcPort          uint16
+	LogLevel         string
 }
 
 var proxyEventChan chan *types.ProxyEvent
