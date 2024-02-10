@@ -7,7 +7,6 @@ import (
 	"syscall"
 
 	proxy "github.com/vitvly/lc-proxy-wrapper"
-	types "github.com/vitvly/lc-proxy-wrapper/types"
 )
 
 func main() {
@@ -22,8 +21,11 @@ func main() {
 		//Eth2Network:      "prater",
 		//TrustedBlockRoot: "0x017e4563ebf7fed67cff819c63d8da397b4ed0452a3bbd7cae13476abc5020e4",
 	}
-	proxyEventCh := make(chan *types.ProxyEvent, 10)
-	proxy.StartVerifProxy(&testConfig, proxyEventCh)
+	proxyEventCh, err := proxy.StartVerifProxy(&testConfig)
+	if err != nil {
+		fmt.Println("Error when starting proxy:", err)
+		return
+	}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)

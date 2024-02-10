@@ -64,12 +64,12 @@ func goCallback(json *C.char, cbType int) {
 	}
 }
 
-func StartVerifProxy(cfg *Config, proxyEventCh chan *types.ProxyEvent) error {
+func StartVerifProxy(cfg *Config) (chan *types.ProxyEvent, error) {
 	if nimContextPtr != nil {
 		// Other instance running
-		return errors.New("Nimbux proxy already (still) running")
+		return nil, errors.New("Nimbux proxy already (still) running")
 	}
-	proxyEventChan = proxyEventCh
+	proxyEventChan = make(chan *types.ProxyEvent, 10)
 	cb := (C.callback_type)(unsafe.Pointer(C.goCallback_cgo))
 
 	jsonBytes, _ := json.Marshal(cfg)
@@ -80,10 +80,15 @@ func StartVerifProxy(cfg *Config, proxyEventCh chan *types.ProxyEvent) error {
 	fmt.Println("ptr: %p", nimContextPtr)
 	fmt.Println("inside go-func after startLcViaJson")
 
-	return nil
+	return proxyEventChan, nil
 
 }
 
-func StopVerifProxy() {
-	C.stopVerifProxy((*C.struct_VerifProxyContext)(nimContextPtr))
+func StopVerifProxy() error {
+	if nimContextPtr != nil {
+		C.stopVerifProxy((*C.struct_VerifProxyContext)(nimContextPtr))
+		return nil
+	} else {
+		return errors.New("Nimbux proxy not running")
+	}
 }
