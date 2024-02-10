@@ -1,8 +1,7 @@
 package types
 
 const (
-	ProxyInitialised int = iota
-	OptimisticHeader
+	OptimisticHeader int = iota
 	FinalizedHeader
 	Stopped
 	Error
