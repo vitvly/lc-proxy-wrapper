@@ -53,10 +53,12 @@ func goCallback(json *C.char, cbType int) {
 		} else if cbType == 2 { // stopped
 			proxyEventChan <- &types.ProxyEvent{types.Stopped, goStr}
 			close(proxyEventChan)
+			proxyEventChan = nil
 			nimContextPtr = nil
 		} else if cbType == 3 { // error
 			proxyEventChan <- &types.ProxyEvent{types.Error, goStr}
 			close(proxyEventChan)
+			proxyEventChan = nil
 			nimContextPtr = nil
 		}
 	}
